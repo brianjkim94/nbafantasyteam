@@ -1,6 +1,6 @@
 # nbafantasyteam
 
-# NBA Fantasy Team!! 
+# NBA Fantasy Team
 
 ## <span style="font-size:larger;">Introduction</span>
 
