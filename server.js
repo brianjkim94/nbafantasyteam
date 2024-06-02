@@ -164,6 +164,55 @@ app.get('/player-search', isLoggedIn, async (req, res) => {
     }
 });
 
+// Edit player route (PUT)
+app.put('/edit-player', isLoggedIn, async (req, res) => {
+    try {
+        const { teamId, oldPlayerName, newPlayerName } = req.body; // Get team and player details from request body
+
+        const team = await Team.findById(teamId); // Find the team by ID
+        if (!team) {
+            throw new Error('Team not found'); // Throw error if team not found
+        }
+
+        const playerIndex = team.players.findIndex(player => player === oldPlayerName); // Find the player in the team
+        if (playerIndex === -1) {
+            throw new Error('Player not found in team'); // Throw error if player not found in the team
+        }
+
+        team.players[playerIndex] = newPlayerName; // Update player name
+        await team.save(); // Save the updated team
+
+        req.flash('success', 'Player updated successfully'); // Flash success message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Error updating player: ' + error.message); // Flash error message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    }
+});
+
+// Edit team name route (PUT)
+app.put('/edit-team', isLoggedIn, async (req, res) => {
+    try {
+        const { teamId, newTeamName } = req.body; // Get team details from request body
+
+        const team = await Team.findById(teamId); // Find the team by ID
+        if (!team) {
+            throw new Error('Team not found'); // Throw error if team not found
+        }
+
+        team.name = newTeamName; // Update team name
+        await team.save(); // Save the updated team
+
+        req.flash('success', 'Team name updated successfully'); // Flash success message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Error updating team name: ' + error.message); // Flash error message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    }
+});
+
 
 const server = app.listen(PORT, () => {
     console.log('🏎️ You are listening on PORT', PORT);

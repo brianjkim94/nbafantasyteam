@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Team</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container centered">
+    <h1 class="heading">Edit Fantasy Team: <%= team.name %></h1>
+    <% if (typeof error !== 'undefined') { %>
+      <p class="text-danger"><%= error %></p>
+    <% } %>
+    <form action="/editTeam/<%= team.id %>" method="POST">
+      <div class="mb-3">
+        <label for="teamName" class="form-label">Team Name:</label>
+        <input type="text" class="form-control form-control-lg" id="teamName" name="teamName" value="<%= team.name %>" required>
+      </div>
+      <% team.players.forEach((player, index) => { %>
+        <div class="mb-3">
+          <label for="player<%= index + 1 %>" class="form-label">Player <%= index + 1 %>:</label>
+          <input type="text" class="form-control form-control-lg" id="player<%= index + 1 %>" name="player<%= index + 1 %>" value="<%= player.player.first_name %> <%= player.player.last_name %>" required>
+        </div>
+      <% }) %>
+      <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+    </form>
+    <a href="/" class="btn btn-secondary mt-3">Back to Home</a>
+  </div>
+</body>
+</html>
