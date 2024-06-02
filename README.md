@@ -19,7 +19,7 @@ Create, Edit or Delete players of their choice to tailor their fantasy team
 
 ## <span style="font-size:larger;">Wireframe</span>
 
-![Alt Text](./images/Screenshot%202024-05-25%20at%203.37.17 PM.png)
+![Alt Text](./images/nbafantasywireframe.png)
 
 ## <span style="font-size:larger;">ERD</span>
 
