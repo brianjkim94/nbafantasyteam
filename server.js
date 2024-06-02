@@ -80,6 +80,29 @@ app.get('/all-players', isLoggedIn, async (req, res) => {
         res.redirect('/'); // Redirect to home page
     }
 });
+
+
+// Player stats route
+app.get('/player/:id', isLoggedIn, async (req, res) => {
+    try {
+        const playerId = req.params.id; // Get player ID from URL parameters
+        const playerResponse = await axios.get(`https://api.balldontlie.io/v1/players/${playerId}`, {
+            headers: {
+                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5'
+            }
+        });
+
+        res.render('playerStats', {
+            player: playerResponse.data // Render player stats page with player data
+        });
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Error fetching player stats'); // Flash error message
+        res.redirect('/all-players'); // Redirect to all players page
+    }
+});
+
+
 const server = app.listen(PORT, () => {
     console.log('🏎️ You are listening on PORT', PORT);
 });
