@@ -213,6 +213,28 @@ app.put('/edit-team', isLoggedIn, async (req, res) => {
     }
 });
 
+// Add player to team route
+app.post('/add-player', isLoggedIn, async (req, res) => {
+    try {
+        const { teamId, playerName } = req.body; // Get team ID and player name from request body
+
+        const team = await Team.findById(teamId); // Find the team by ID
+        if (!team) {
+            throw new Error('Team not found'); // Throw error if team not found
+        }
+
+        team.players.push(playerName); // Add the player to the team
+        await team.save(); // Save the updated team
+
+        req.flash('success', 'Player added successfully'); // Flash success message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Error adding player: ' + error.message); // Flash error message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    }
+});
+
 
 const server = app.listen(PORT, () => {
     console.log('🏎️ You are listening on PORT', PORT);
