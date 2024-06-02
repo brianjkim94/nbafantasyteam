@@ -137,6 +137,34 @@ app.get('/view-teams', isLoggedIn, async (req, res) => {
     }
 });
 
+// Player search route
+app.get('/player-search', isLoggedIn, async (req, res) => {
+    try {
+        const playerName = req.query.name; // Get player name from query parameters
+        const response = await axios.get('https://api.balldontlie.io/v1/players', {
+            headers: {
+                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5'
+            },
+            params: {
+                search: playerName
+            }
+        });
+
+        if (response.data.data.length === 0) {
+            throw new Error(`Player not found: ${playerName}`); // Throw error if player not found
+        }
+
+        // Assume the first result is the correct player
+        const player = response.data.data[0];
+        res.redirect(`/player/${player.id}`); // Redirect to player stats page
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Error fetching player stats: ' + error.message); // Flash error message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    }
+});
+
+
 const server = app.listen(PORT, () => {
     console.log('🏎️ You are listening on PORT', PORT);
 });
