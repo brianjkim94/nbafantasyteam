@@ -1,49 +1,50 @@
-require('dotenv').config();
-const express = require('express');
-const app = express();
-const flash = require('connect-flash');
-const session = require('express-session');
-const passport = require('./config/passport-config');
-const isLoggedIn = require('./middleware/isLoggedIn');
-const { User } = require('./models');
-const SECRET_SESSION = process.env.SECRET_SESSION;
-const PORT = process.env.PORT || 3000;
+const express = require('express'); // Import the express module to create the server
+const axios = require('axios'); // Import axios for making HTTP requests
+const flash = require('connect-flash'); // Import connect-flash for flash messages
+const session = require('express-session'); // Import express-session for session management
+const methodOverride = require('method-override'); // Import method-override to use HTTP verbs like PUT and DELETE
+const passport = require('./config/passport-config'); // Import passport for authentication
+const isLoggedIn = require('./middleware/isLoggedIn'); // Import middleware to check if the user is logged in
+const { User, Team } = require('./models'); // Import User and Team models
+require('dotenv').config(); // Load environment variables from .env file
 
-//import model
-// const { User } = require('./models');
+const SECRET_SESSION = process.env.SECRET_SESSION; // Get secret session key from environment variables
+const PORT = process.env.PORT || 3000; // Set the port number from environment variables or default to 3000
 
-app.set('view engine', 'ejs');
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(__dirname + '/public'));
+const app = express(); // Create an Express application
+
+app.set('view engine', 'ejs'); // Set the view engine to EJS for rendering templates
+app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
+app.use(express.static(__dirname + '/public')); // Serve static files from the "public" directory
+app.use(methodOverride('_method')); // Use method-override to support PUT and DELETE methods
 app.use(session({
-    secret: SECRET_SESSION,
-    resave: false,
-    saveUninitialized: true
+    secret: SECRET_SESSION, // Secret for signing session ID cookie
+    resave: false, // Do not save session if unmodified
+    saveUninitialized: true // Save uninitialized sessions
 }));
-app.use(flash());
+app.use(flash()); // Use connect-flash for flash messages
 
 // initial passport
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize()); // Initialize passport for authentication
+app.use(passport.session()); // Use passport to manage sessions
 
 // middleware for tracking users and alerts
 app.use((req, res, next) => {
-    res.locals.alerts = req.flash();
-    res.locals.currentUser = req.user;
-    next(); // going to said route
+    res.locals.alerts = req.flash(); // Set flash messages to res.locals for easy access in views
+    res.locals.currentUser = req.user; // Set current user to res.locals for easy access in views
+    next(); // Move to the next middleware
 });
 
 app.get('/', (req, res) => {
-    res.render('home', {});
+    res.render('home', {}); // Render the home page
 });
 
 // import auth routes
-app.use('/auth', require('./controllers/auth'));
-
+app.use('/auth', require('./controllers/auth')); // Use authentication routes from controllers/auth.js
 
 // --- AUTHENTICATED ROUTE: go to user profile page
-app.get('/profile', isLoggedIn, (req, res) => {
-    const { name, email, phone } = req.user;
+app.get('/profile', isLoggedIn, (req, res) => { // Profile route, accessible only if logged in
+    const { name, email, phone } = req.user; // Get user details from the request object
     res.render('profile', { 
         name,
         email, 
@@ -51,6 +52,34 @@ app.get('/profile', isLoggedIn, (req, res) => {
     });
 });
 
+// All players route
+app.get('/all-players', isLoggedIn, async (req, res) => {
+    try {
+        let page = parseInt(req.query.page) || 1; // Get the current page from query parameters or default to 1
+        let perPage = 100; // Number of players per page
+        const response = await axios.get('https://api.balldontlie.io/v1/players', {
+            headers: {
+                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5'
+            },
+            params: {
+                page: page,
+                per_page: perPage
+            }
+        });
+
+        let players = response.data.data; // Get players data from response
+        let totalPages = response.data.meta.total_pages; // Get total number of pages
+
+        res.render('allPlayers', {
+            players: players,
+            currentPage: page,
+            totalPages: totalPages
+        });
+    } catch (error) {
+        req.flash('error', 'Error fetching players'); // Flash error message
+        res.redirect('/'); // Redirect to home page
+    }
+});
 const server = app.listen(PORT, () => {
     console.log('🏎️ You are listening on PORT', PORT);
 });
