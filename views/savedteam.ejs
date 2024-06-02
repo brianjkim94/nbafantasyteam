@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fantasy Team</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-5">Your Fantasy Team: <%= team.name %></h1>
+    <% if (error) { %>
+      <p class="text-danger"><%= error %></p>
+    <% } else { %>
+      <% team.players.forEach(member => { %>
+        <div class="card my-3">
+          <div class="card-body">
+            <h2 class="card-title"><%= member.player.first_name %> <%= member.player.last_name %></h2>
+            <p>Team: <%= member.player.team.full_name %></p>
+            <p>Position: <%= member.player.position %></p>
+            <p>Height: <%= member.player.height_feet %> feet <%= member.player.height_inches %> inches</p>
+            <p>Weight: <%= member.player.weight_pounds %> pounds</p>
+            <h3>Stats:</h3>
+            <% member.stats.forEach(stat => { %>
+              <p>Game Date: <%= stat.game.date %></p>
+              <p>Points: <%= stat.pts %>, Assists: <%= stat.ast %>, Rebounds: <%= stat.reb %></p>
+              <hr>
+            <% }) %>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+    <a href="/" class="btn btn-primary">Back to Home</a>
+  </div>
+</body>
+</html>
+

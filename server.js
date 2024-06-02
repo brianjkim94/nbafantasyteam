@@ -103,6 +103,40 @@ app.get('/player/:id', isLoggedIn, async (req, res) => {
 });
 
 
+// Save team route
+app.post('/save-team', isLoggedIn, async (req, res) => {
+    try {
+        const { teamName, player1, player2, player3, player4, player5 } = req.body; // Get team details from request body
+        const players = [player1, player2, player3, player4, player5]; // Create an array of players
+
+        const team = {
+            name: teamName,
+            players: players
+        };
+
+        await Team.create(team); // Save the team to the database
+
+        req.flash('success', 'Team saved successfully!'); // Flash success message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Error saving the team: ' + error.message); // Flash error message
+        res.redirect('/'); // Redirect to home page
+    }
+});
+
+// View teams route
+app.get('/view-teams', isLoggedIn, async (req, res) => {
+    try {
+        const teams = await Team.find({}); // Get all teams from the database
+        res.render('viewTeams', { teams }); // Render the view teams page with the teams data
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Error fetching teams'); // Flash error message
+        res.redirect('/'); // Redirect to home page
+    }
+});
+
 const server = app.listen(PORT, () => {
     console.log('🏎️ You are listening on PORT', PORT);
 });
