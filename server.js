@@ -236,8 +236,47 @@ app.post('/add-player', isLoggedIn, async (req, res) => {
 });
 
 
+// Delete player route
+app.delete('/delete-player', isLoggedIn, async (req, res) => {
+    try {
+        const { teamId, playerName } = req.body; // Get team ID and player name from request body
+
+        const team = await Team.findById(teamId); // Find the team by ID
+        if (!team) {
+            throw new Error('Team not found'); // Throw error if team not found
+        }
+
+        team.players = team.players.filter(player => player !== playerName); // Remove the player from the team
+        await team.save(); // Save the updated team
+
+        req.flash('success', 'Player removed successfully'); // Flash success message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Error removing player: ' + error.message); // Flash error message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    }
+});
+
+// Delete team route
+app.delete('/delete-team', isLoggedIn, async (req, res) => {
+    try {
+        const { teamId } = req.body; // Get team ID from request body
+
+        await Team.findByIdAndDelete(teamId); // Delete the team by ID
+
+        req.flash('success', 'Team deleted successfully'); // Flash success message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Error deleting team: ' + error.message); // Flash error message
+        res.redirect('/view-teams'); // Redirect to view teams page
+    }
+});
+
+
 const server = app.listen(PORT, () => {
     console.log('🏎️ You are listening on PORT', PORT);
 });
 
-module.exports = server;
+module.exports = server; // Export the server for testing or further configuration
