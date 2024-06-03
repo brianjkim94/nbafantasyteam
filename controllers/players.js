@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const axios = require('axios');
+const axios = require('axios'); // Import axios for making HTTP requests
 const isLoggedIn = require('../middleware/isLoggedIn'); // Import middleware to check if the user is logged in
 
 // All players route
-router.get('/', isLoggedIn, async (req, res) => {
+router.get('/all-players', isLoggedIn, async (req, res) => {
     try {
         let page = parseInt(req.query.page) || 1; // Get the current page from query parameters or default to 1
         let perPage = 100; // Number of players per page
@@ -33,7 +33,7 @@ router.get('/', isLoggedIn, async (req, res) => {
 });
 
 // Player stats route
-router.get('/:id', isLoggedIn, async (req, res) => {
+router.get('/player/:id', isLoggedIn, async (req, res) => {
     try {
         const playerId = req.params.id; // Get player ID from URL parameters
         const playerResponse = await axios.get(`https://api.balldontlie.io/v1/players/${playerId}`, {
@@ -48,12 +48,12 @@ router.get('/:id', isLoggedIn, async (req, res) => {
     } catch (error) {
         console.error(error);
         req.flash('error', 'Error fetching player stats'); // Flash error message
-        res.redirect('/players'); // Redirect to all players page
+        res.redirect('/all-players'); // Redirect to all players page
     }
 });
 
 // Player search route
-router.get('/search', isLoggedIn, async (req, res) => {
+router.get('/player-search', isLoggedIn, async (req, res) => {
     try {
         const playerName = req.query.name; // Get player name from query parameters
         const response = await axios.get('https://api.balldontlie.io/v1/players', {
@@ -71,11 +71,11 @@ router.get('/search', isLoggedIn, async (req, res) => {
 
         // Assume the first result is the correct player
         const player = response.data.data[0];
-        res.redirect(`/players/${player.id}`); // Redirect to player stats page
+        res.redirect(`/player/${player.id}`); // Redirect to player stats page
     } catch (error) {
         console.error(error);
         req.flash('error', 'Error fetching player stats: ' + error.message); // Flash error message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     }
 });
 

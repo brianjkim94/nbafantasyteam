@@ -4,7 +4,7 @@ const isLoggedIn = require('../middleware/isLoggedIn'); // Import middleware to 
 const { Team } = require('../models'); // Import Team model
 
 // Save team route
-router.post('/save', isLoggedIn, async (req, res) => {
+router.post('/save-team', isLoggedIn, async (req, res) => {
     try {
         const { teamName, player1, player2, player3, player4, player5 } = req.body; // Get team details from request body
         const players = [player1, player2, player3, player4, player5]; // Create an array of players
@@ -17,7 +17,7 @@ router.post('/save', isLoggedIn, async (req, res) => {
         await Team.create(team); // Save the team to the database
 
         req.flash('success', 'Team saved successfully!'); // Flash success message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     } catch (error) {
         console.error(error);
         req.flash('error', 'Error saving the team: ' + error.message); // Flash error message
@@ -26,7 +26,7 @@ router.post('/save', isLoggedIn, async (req, res) => {
 });
 
 // View teams route
-router.get('/', isLoggedIn, async (req, res) => {
+router.get('/view-teams', isLoggedIn, async (req, res) => {
     try {
         const teams = await Team.find({}); // Get all teams from the database
         res.render('viewTeams', { teams }); // Render the view teams page with the teams data
@@ -56,16 +56,16 @@ router.put('/edit-player', isLoggedIn, async (req, res) => {
         await team.save(); // Save the updated team
 
         req.flash('success', 'Player updated successfully'); // Flash success message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     } catch (error) {
         console.error(error);
         req.flash('error', 'Error updating player: ' + error.message); // Flash error message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     }
 });
 
 // Edit team name route (PUT)
-router.put('/edit-name', isLoggedIn, async (req, res) => {
+router.put('/edit-team', isLoggedIn, async (req, res) => {
     try {
         const { teamId, newTeamName } = req.body; // Get team details from request body
 
@@ -78,11 +78,11 @@ router.put('/edit-name', isLoggedIn, async (req, res) => {
         await team.save(); // Save the updated team
 
         req.flash('success', 'Team name updated successfully'); // Flash success message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     } catch (error) {
         console.error(error);
         req.flash('error', 'Error updating team name: ' + error.message); // Flash error message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     }
 });
 
@@ -100,11 +100,11 @@ router.post('/add-player', isLoggedIn, async (req, res) => {
         await team.save(); // Save the updated team
 
         req.flash('success', 'Player added successfully'); // Flash success message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     } catch (error) {
         console.error(error);
         req.flash('error', 'Error adding player: ' + error.message); // Flash error message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     }
 });
 
@@ -122,11 +122,11 @@ router.delete('/delete-player', isLoggedIn, async (req, res) => {
         await team.save(); // Save the updated team
 
         req.flash('success', 'Player removed successfully'); // Flash success message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     } catch (error) {
         console.error(error);
         req.flash('error', 'Error removing player: ' + error.message); // Flash error message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     }
 });
 
@@ -138,11 +138,11 @@ router.delete('/delete-team', isLoggedIn, async (req, res) => {
         await Team.findByIdAndDelete(teamId); // Delete the team by ID
 
         req.flash('success', 'Team deleted successfully'); // Flash success message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     } catch (error) {
         console.error(error);
         req.flash('error', 'Error deleting team: ' + error.message); // Flash error message
-        res.redirect('/teams'); // Redirect to view teams page
+        res.redirect('/view-teams'); // Redirect to view teams page
     }
 });
 
