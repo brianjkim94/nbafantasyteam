@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All NBA Teams</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>All NBA Teams</h1>
+    <% if (alerts.error) { %>
+        <div class="alert alert-danger">
+            <% alerts.error.forEach(function(error) { %>
+                <p><%= error %></p>
+            <% }); %>
+        </div>
+    <% } %>
+    <% if (alerts.success) { %>
+        <div class="alert alert-success">
+            <% alerts.success.forEach(function(message) { %>
+                <p><%= message %></p>
+            <% }); %>
+        </div>
+    <% } %>
+    <ul>
+        <% teams.forEach(team => { %>
+            <li>
+                <a href="/nba/team/<%= team.id %>"><%= team.full_name %></a>
+            </li>
+        <% }); %>
+    </ul>
+</body>
+</html>

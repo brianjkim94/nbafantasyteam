@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Players</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Team Players</h1>
+    <% if (alerts.error) { %>
+        <div class="alert alert-danger">
+            <% alerts.error.forEach(function(error) { %>
+                <p><%= error %></p>
+            <% }); %>
+        </div>
+    <% } %>
+    <% if (alerts.success) { %>
+        <div class="alert alert-success">
+            <% alerts.success.forEach(function(message) { %>
+                <p><%= message %></p>
+            <% }); %>
+        </div>
+    <% } %>
+    <ul>
+        <% players.forEach(player => { %>
+            <li>
+                <a href="/player/<%= player.id %>"><%= player.first_name %> <%= player.last_name %></a>
+            </li>
+        <% }); %>
+    </ul>
+</body>
+</html>
+
