@@ -36,9 +36,10 @@ router.get('/all-players', isLoggedIn, async (req, res) => {
 router.get('/player/:id', isLoggedIn, async (req, res) => {
     try {
         const playerId = req.params.id; // Get player ID from URL parameters
-        const playerResponse = await axios.get(`https://api.balldontlie.io/v1/players/${playerId}`, {
+        const playerResponse = await axios.get(`https://api.balldontlie.io/v1/players/${playerId}`, { 
+            // Make an HTTP GET request to the Ball Don't Lie API to fetch player details
             headers: {
-                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5'
+                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5' // Include the API key in the request headers for authorization
             }
         });
 
@@ -56,9 +57,9 @@ router.get('/player/:id', isLoggedIn, async (req, res) => {
 router.get('/player-search', isLoggedIn, async (req, res) => {
     try {
         const playerName = req.query.name; // Get player name from query parameters
-        const response = await axios.get('https://api.balldontlie.io/v1/players', {
+        const response = await axios.get('https://api.balldontlie.io/v1/players', { 
             headers: {
-                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5'
+                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5' // Include the API key in the request headers for authorization
             },
             params: {
                 search: playerName

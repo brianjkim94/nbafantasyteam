@@ -46,25 +46,6 @@ app.use('/', require('./controllers/players')); // Use player routes from contro
 app.use('/', require('./controllers/teams')); // Use team routes from controllers/teams.js
 app.use('/', require('./controllers/nbaTeams')); // Use NBA teams routes from controllers/nbaTeams.js
 
-// GET route to "All NBA Teams" page
-app.get('/nba-teams', isLoggedIn, async (req, res) => {
-    try {
-        const response = await axios.get('https://api.balldontlie.io/v1/teams', {
-            headers: {
-                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5'
-            }
-        });
-
-        const teams = response.data.data; // Get teams data from response
-
-        res.render('allNBATeams', { teams });
-    } catch (error) {
-        console.error(error);
-        req.flash('error', 'Error fetching NBA teams');
-        res.redirect('/');
-    }
-});
-
 // Start the server and listen on the specified port
 const server = app.listen(PORT, () => {
     console.log('🏎️ You are listening on PORT', PORT);
