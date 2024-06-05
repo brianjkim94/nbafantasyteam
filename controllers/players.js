@@ -67,7 +67,7 @@ router.get('/player-search', isLoggedIn, async (req, res) => {
         });
 
         if (response.data.data.length === 0) {
-            throw new Error(`Player not found: ${playerName}`); // Throw error if player not found
+            throw new Error(`Player not found: ${playerName}`); // Show error if player not found
         }
 
         // Assume the first result is the correct player
