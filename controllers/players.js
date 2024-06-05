@@ -76,7 +76,7 @@ router.get('/player-search', isLoggedIn, async (req, res) => {
     } catch (error) {
         console.error(error);
         req.flash('error', 'Error fetching player stats: ' + error.message); // Flash error message
-        res.redirect('/view-teams'); // Redirect to view teams page
+        res.redirect('/'); // Redirect to home page
     }
 });
 

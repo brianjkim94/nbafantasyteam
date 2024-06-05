@@ -43,7 +43,7 @@ router.put('/edit-player', isLoggedIn, async (req, res) => {
         const { teamId, oldPlayerName, newPlayerName } = req.body; // Get team and player details from request body
 
         const team = await Team.findById(teamId); // Find the team by ID
-        if (!team) {
+                if (!team) {
             throw new Error('Team not found'); // Throw error if team not found
         }
 
