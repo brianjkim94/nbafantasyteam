@@ -1,54 +1,50 @@
-const express = require('express'); // Import the express module to create the server
-const axios = require('axios'); // Import axios for making HTTP requests
-const flash = require('connect-flash'); // Import connect-flash for flash messages
-const session = require('express-session'); // Import express-session for session management
-const methodOverride = require('method-override'); // Import method-override to support PUT and DELETE methods
-const passport = require('./config/passport-config'); // Import passport for authentication
-const isLoggedIn = require('./middleware/isLoggedIn'); // Import middleware to check if the user is logged in
-const { User, Team } = require('./models'); // Import User and Team models
-require('dotenv').config(); // Load environment variables from .env file
+const express = require('express');
+const axios = require('axios');
+const flash = require('connect-flash');
+const session = require('express-session');
+const methodOverride = require('method-override');
+const passport = require('./config/passport-config');
+const isLoggedIn = require('./middleware/isLoggedIn');
+const { User, Team } = require('./models');
+require('dotenv').config();
 
-const SECRET_SESSION = process.env.SECRET_SESSION; // Get secret session key from environment variables
-const PORT = process.env.PORT || 3000; // Set the port number from environment variables or default to 3000
+const SECRET_SESSION = process.env.SECRET_SESSION;
+const PORT = process.env.PORT || 3000;
 
-const app = express(); // Create an Express application
+const app = express();
 
-app.set('view engine', 'ejs'); // Set the view engine to EJS for rendering templates
-app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
-app.use(express.static(__dirname + '/public')); // Serve static files from the "public" directory
-app.use(methodOverride('_method')); // Use method-override to support PUT and DELETE methods
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/public'));
+app.use(methodOverride('_method'));
 app.use(session({
-    secret: SECRET_SESSION, // Secret for signing session ID cookie
-    resave: false, // Do not save session if unmodified
-    saveUninitialized: true // Save uninitialized sessions
+    secret: SECRET_SESSION,
+    resave: false,
+    saveUninitialized: true
 }));
-app.use(flash()); // Use connect-flash for flash messages
+app.use(flash());
 
-// Initial passport
-app.use(passport.initialize()); // Initialize passport for authentication
-app.use(passport.session()); // Use passport to manage sessions
+app.use(passport.initialize());
+app.use(passport.session());
 
-// Middleware for tracking users and alerts
 app.use((req, res, next) => {
-    res.locals.alerts = req.flash(); // Set flash messages to res.locals for easy access in views
-    res.locals.currentUser = req.user; // Set current user to res.locals for easy access in views
-    next(); // Move to the next middleware
+    res.locals.alerts = req.flash();
+    res.locals.currentUser = req.user;
+    next();
 });
 
 app.get('/', (req, res) => {
-    res.render('home', {}); // Render the home page
+    res.render('home', {});
 });
 
-// Import auth routes
-app.use('/auth', require('./controllers/auth')); // Use authentication routes from controllers/auth.js
-app.use('/', require('./controllers/user')); // Use user routes from controllers/user.js
-app.use('/', require('./controllers/players')); // Use player routes from controllers/players.js
-app.use('/', require('./controllers/teams')); // Use team routes from controllers/teams.js
-app.use('/', require('./controllers/nbaTeams')); // Use NBA teams routes from controllers/nbaTeams.js
+app.use('/auth', require('./controllers/auth'));
+app.use('/', require('./controllers/user'));
+app.use('/', require('./controllers/players'));
+app.use('/', require('./controllers/teams'));
+app.use('/', require('./controllers/nbaTeams'));
 
-// Start the server and listen on the specified port
 const server = app.listen(PORT, () => {
     console.log('🏎️ You are listening on PORT', PORT);
 });
 
-module.exports = server; // Export the server for testing or further configuration
+module.exports = server;

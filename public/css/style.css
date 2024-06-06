@@ -16,6 +16,7 @@
    --second-bg-color: #244b93;
    --text-color: #fff; 
    --main-color: #c35531;
+   --navbar-bg-color: green; /* Add this line for navbar background color */
 }
 
 html {
@@ -55,6 +56,10 @@ section {
    color: var(--text-color);
    font-weight: 600;
    cursor: default;
+}
+
+.navbar {
+   background-color: var(--navbar-bg-color); /* Set the navbar background color */
 }
 
 .navbar a {
@@ -130,7 +135,7 @@ span {
    border: 0.2rem solid var(--main-color);
    border-radius: 50%;
    font-size: 2rem;
-   color: var(--main-color);
+   color: var (--main-color);
    margin: 3rem 1.5rem 3rem 0;
    transition: 0.5s ease;
 }
@@ -179,7 +184,6 @@ span {
    text-align: left;
    line-height: 1.2;
 }
-
 .about-content h3 {
    font-size: 2.6rem;
 }
@@ -319,7 +323,6 @@ span {
 }
 
 .contact form .input-box {
-   /* display: flex; */
    justify-content: space-between;
    flex-wrap: wrap;
 }
@@ -488,7 +491,6 @@ span {
 }
 
 @media (max-width: 450px) {
-   /* My window cannot go this small, can't see if anything happens. If I change to 500px I can see. */
    html {
        font-size: 50%;
    }
@@ -519,6 +521,7 @@ nav ul {
    margin: 0;
    display: flex;
    justify-content: center;
+   background-color: var(--navbar-bg-color); /* Set background color for nav */
 }
 
 nav ul li {
@@ -579,7 +582,7 @@ h1 {
 }
 
 .team ul li a {
-   color: var(--main-color); /* Set the desired color for player names */
+   color: var(--main-color);
    text-decoration: none;
 }
 

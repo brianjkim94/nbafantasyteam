@@ -1,83 +1,105 @@
 const express = require('express');
 const router = express.Router();
-const axios = require('axios'); // Import axios for making HTTP requests
-const isLoggedIn = require('../middleware/isLoggedIn'); // Import middleware to check if the user is logged in
+const axios = require('axios');
+const isLoggedIn = require('../middleware/isLoggedIn');
 
 // All players route
 router.get('/all-players', isLoggedIn, async (req, res) => {
     try {
-        let page = parseInt(req.query.page) || 1; // Get the current page from query parameters or default to 1
-        let perPage = 100; // Number of players per page
+        let page = parseInt(req.query.page) || 1;
+        let perPage = 100;
         const response = await axios.get('https://api.balldontlie.io/v1/players', {
             headers: {
                 'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5'
             },
-            params: {
-                page: page,
-                per_page: perPage
-            }
+            params: { page, per_page: perPage }
         });
 
-        let players = response.data.data; // Get players data from response
-        let totalPages = response.data.meta.total_pages; // Get total number of pages
+        let players = response.data.data;
+        let totalPages = response.data.meta.total_pages;
 
         res.render('allPlayers', {
-            players: players,
+            players,
             currentPage: page,
-            totalPages: totalPages
+            totalPages
         });
     } catch (error) {
-        req.flash('error', 'Error fetching players'); // Flash error message
-        res.redirect('/'); // Redirect to home page
+        req.flash('error', 'Error fetching players');
+        res.redirect('/');
     }
 });
 
 // Player stats route
 router.get('/player/:id', isLoggedIn, async (req, res) => {
     try {
-        const playerId = req.params.id; // Get player ID from URL parameters
-        const playerResponse = await axios.get(`https://api.balldontlie.io/v1/players/${playerId}`, { 
-            // Make an HTTP GET request to the Ball Don't Lie API to fetch player details
+        const playerId = req.params.id;
+        const playerResponse = await axios.get(`https://api.balldontlie.io/v1/players/${playerId}`, {
             headers: {
-                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5' // Include the API key in the request headers for authorization
+                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5'
             }
         });
 
         res.render('playerStats', {
-            player: playerResponse.data // Render player stats page with player data
+            player: playerResponse.data
         });
     } catch (error) {
         console.error(error);
-        req.flash('error', 'Error fetching player stats'); // Flash error message
-        res.redirect('/all-players'); // Redirect to all players page
+        req.flash('error', 'Error fetching player stats');
+        res.redirect('/all-players');
     }
 });
 
-// Player search route
-router.get('/player-search', isLoggedIn, async (req, res) => {
+// Player search route (POST)
+router.post('/player-search', isLoggedIn, async (req, res) => {
     try {
-        const playerName = req.query.name; // Get player name from query parameters
-        const response = await axios.get('https://api.balldontlie.io/v1/players', { 
+        const playerName = req.body.name;
+        const response = await axios.get('https://api.balldontlie.io/v1/players', {
             headers: {
-                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5' // Include the API key in the request headers for authorization
+                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5'
             },
-            params: {
-                search: playerName
-            }
+            params: { search: playerName }
         });
 
         if (response.data.data.length === 0) {
-            throw new Error(`Player not found: ${playerName}`); // Show error if player not found
+            throw new Error(`Player not found: ${playerName}`);
         }
 
-        // Assume the first result is the correct player
         const player = response.data.data[0];
-        res.redirect(`/player/${player.id}`); // Redirect to player stats page
+        res.redirect(`/player/${player.id}`);
     } catch (error) {
         console.error(error);
-        req.flash('error', 'Error fetching player stats: ' + error.message); // Flash error message
-        res.redirect('/'); // Redirect to home page
+        req.flash('error', 'Error fetching player stats: ' + error.message);
+        res.redirect('/');
     }
+});
+
+// GET route for player search by name
+router.get('/player-search/:name', isLoggedIn, async (req, res) => {
+    try {
+        const playerName = req.params.name;
+        const response = await axios.get('https://api.balldontlie.io/v1/players', {
+            headers: {
+                'Authorization': '6e33dc9e-09e4-4366-8905-8a9cfbad54e5'
+            },
+            params: { search: playerName }
+        });
+
+        if (response.data.data.length === 0) {
+            throw new Error(`Player not found: ${playerName}`);
+        }
+
+        const player = response.data.data[0];
+        res.redirect(`/player/${player.id}`);
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Error fetching player stats: ' + error.message);
+        res.redirect('/');
+    }
+});
+
+// Route to render the search player page
+router.get('/player-search', isLoggedIn, (req, res) => {
+    res.render('searchPlayer');
 });
 
 module.exports = router;

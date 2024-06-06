@@ -147,4 +147,3 @@ router.delete('/delete-team', isLoggedIn, async (req, res) => {
 });
 
 module.exports = router;
-

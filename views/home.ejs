@@ -8,82 +8,76 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <% if (alerts.success) { %>
-        <% alerts.success.forEach(msg => { %>
-            <div class="alert alert-success"><%= msg %></div>
-        <% }) %>
-    <% } %>
+  <% if (alerts.success) { %>
+    <% alerts.success.forEach(msg => { %>
+      <div class="alert alert-success"><%= msg %></div>
+    <% }) %>
+  <% } %>
 
-    <% if (alerts.error) { %>
-        <% alerts.error.forEach(msg => { %>
-            <div class="alert alert-danger"><%= msg %></div>
-        <% }) %>
-    <% } %>
+  <% if (alerts.error) { %>
+    <% alerts.error.forEach(msg => { %>
+      <div class="alert alert-danger"><%= msg %></div>
+    <% }) %>
+  <% } %>
 
-    <header>
-        <nav class="navbar">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/all-players">All Players</a></li>
-                <li><a href="/view-teams">View Teams</a></li>
-                <li><a href="/nba-teams">All NBA Teams</a></li>
-                <% if (!currentUser) { %> 
-                    <li><a href="/auth/signup">Signup</a></li>
-                    <li><a href="/auth/login">Login</a></li>
-                <% } else { %> 
-                    <li><a href="/auth/logout">Logout</a></li>
-                    <li><a href="/profile">Profile</a></li>
-                <% } %> 
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <nav class="navbar">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-players">All Players</a></li>
+        <li><a href="/view-teams">View Teams</a></li>
+        <li><a href="/nba-teams">All NBA Teams</a></li>
+        <li><a href="/player-search">Search Player</a></li>
+        <% if (!currentUser) { %> 
+          <li><a href="/auth/signup">Signup</a></li>
+          <li><a href="/auth/login">Login</a></li>
+        <% } else { %> 
+          <li><a href="/auth/logout">Logout</a></li>
+          <li><a href="/profile">Profile</a></li>
+        <% } %> 
+      </ul>
+    </nav>
+  </header>
 
-    <div class="container mt-4">
-        <h2>Create Your NBA Fantasy Team!</h2>
-        <form action="/save-team" method="post">
-            <div class="mb-3">
-                <label for="teamName" class="form-label">Team Name:</label>
-                <input type="text" class="form-control" name="teamName" required>
-            </div>
-            <div class="mb-3">
-                <label for="player1" class="form-label">Player 1:</label>
-                <input type="text" class="form-control" name="player1" required>
-            </div>
-            <div class="mb-3">
-                <label for="player2" class="form-label">Player 2:</label>
-                <input type="text" class="form-control" name="player2" required>
-            </div>
-            <div class="mb-3">
-                <label for="player3" class="form-label">Player 3:</label>
-                <input type="text" class="form-control" name="player3" required>
-            </div>
-            <div class="mb-3">
-                <label for="player4" class="form-label">Player 4:</label>
-                <input type="text" class="form-control" name="player4" required>
-            </div>
-            <div class="mb-3">
-                <label for="player5" class="form-label">Player 5:</label>
-                <input type="text" class="form-control" name="player5" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Save Team</button>
-        </form>
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">Create Your NBA Fantasy Team!</h2>
+    <form action="/save-team" method="post" class="mb-5">
+      <div class="mb-3">
+        <label for="teamName" class="form-label">Team Name:</label>
+        <input type="text" class="form-control" name="teamName" required>
+      </div>
+      <div class="mb-3">
+        <label for="player1" class="form-label">Player 1:</label>
+        <input type="text" class="form-control" name="player1" required>
+      </div>
+      <div class="mb-3">
+        <label for="player2" class="form-label">Player 2:</label>
+        <input type="text" class="form-control" name="player2" required>
+      </div>
+      <div class="mb-3">
+        <label for="player3" class="form-label">Player 3:</label>
+        <input type="text" class="form-control" name="player3" required>
+      </div>
+      <div class="mb-3">
+        <label for="player4" class="form-label">Player 4:</label>
+        <input type="text" class="form-control" name="player4" required>
+      </div>
+      <div class="mb-3">
+        <label for="player5" class="form-label">Player 5:</label>
+        <input type="text" class="form-control" name="player5" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Save Team</button>
+    </form>
+  </div>
 
-        <h2 class="mt-4">Search for a Player</h2>
-        <form action="/player-search" method="get">
-            <div class="mb-3">
-                <label for="playerName" class="form-label">Player Name:</label>
-                <input type="text" class="form-control" name="name" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-
-        <div class="d-flex justify-content-between mt-4">
-            <img src="/images/nba-logo.jpg" alt="NBA Logo" class="img-fluid" style="height: 150px;">
-            <img src="/images/nba-logo.jpg" alt="NBA Logo" class="img-fluid" style="height: 150px;">
-            <img src="/images/nba-logo.jpg" alt="NBA Logo" class="img-fluid" style="height: 150px;">
-            <img src="/images/nba-logo.jpg" alt="NBA Logo" class="img-fluid" style="height: 150px;">
-            <img src="/images/nba-logo.jpg" alt="NBA Logo" class="img-fluid" style="height: 150px;">
-        </div>
-    </div>
+  <div class="d-flex justify-content-between mt-4">
+    <img src="/images/nba-logo.jpg" alt="NBA Logo" class="img-fluid" style="height: 150px;">
+    <img src="/images/nba-logo.jpg" alt="NBA Logo" class="img-fluid" style="height: 150px;">
+    <img src="/images/nba-logo.jpg" alt="NBA Logo" class="img-fluid" style="height: 150px;">
+    <img src="/images/nba-logo.jpg" alt="NBA Logo" class="img-fluid" style="height: 150px;">
+    <img src="/images/nba-logo.jpg" alt="NBA Logo" class="img-fluid" style="height: 150px;">
+  </div>
 </body>
 </html>
+
+
