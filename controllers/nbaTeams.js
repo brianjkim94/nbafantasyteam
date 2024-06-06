@@ -22,7 +22,7 @@ router.get('/nba-teams', isLoggedIn, async (req, res) => {
     }
 });
 
-// Players of a specific NBA team route
+// Players under a specific NBA team route
 router.get('/nba/team/:id', isLoggedIn, async (req, res) => {
     try {
         const teamId = req.params.id; // Get team ID from URL parameters
