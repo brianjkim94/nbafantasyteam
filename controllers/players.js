@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 const isLoggedIn = require('../middleware/isLoggedIn');
 
-// All players route
+// All players GET route
 router.get('/all-players', isLoggedIn, async (req, res) => {
     try {
         let page = parseInt(req.query.page) || 1;
@@ -29,7 +29,7 @@ router.get('/all-players', isLoggedIn, async (req, res) => {
     }
 });
 
-// Player stats route
+// Player stats GET route
 router.get('/player/:id', isLoggedIn, async (req, res) => {
     try {
         const playerId = req.params.id;
@@ -73,7 +73,7 @@ router.post('/player-search', isLoggedIn, async (req, res) => {
     }
 });
 
-// GET route for player search by name
+// GET route for player-search by name
 router.get('/player-search/:name', isLoggedIn, async (req, res) => {
     try {
         const playerName = req.params.name;

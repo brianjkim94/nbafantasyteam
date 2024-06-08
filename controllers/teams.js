@@ -3,7 +3,7 @@ const router = express.Router();
 const isLoggedIn = require('../middleware/isLoggedIn'); // Import middleware to check if the user is logged in
 const { Team } = require('../models'); // Import Team model
 
-// Save team route
+// Save team POST route
 router.post('/save-team', isLoggedIn, async (req, res) => {
     try {
         const { teamName, player1, player2, player3, player4, player5 } = req.body; // Get team details from request body
@@ -25,7 +25,7 @@ router.post('/save-team', isLoggedIn, async (req, res) => {
     }
 });
 
-// View teams route
+// View teams GET route
 router.get('/view-teams', isLoggedIn, async (req, res) => {
     try {
         const teams = await Team.find({}); // Get all teams from the database
