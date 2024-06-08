@@ -7,6 +7,15 @@ const passport = require('./config/passport-config');
 const isLoggedIn = require('./middleware/isLoggedIn');
 const { User, Team } = require('./models');
 require('dotenv').config();
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/nbaFantasyTeams';
+
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected...'))
+    .catch(err => console.log(err));
+
 
 const SECRET_SESSION = process.env.SECRET_SESSION;
 const PORT = process.env.PORT || 3000;
